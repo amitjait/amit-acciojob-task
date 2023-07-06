@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../firebaseConfig";
 import { toast } from "react-toastify";
 import errorMapping from "../Util/errorMapping";
@@ -11,6 +11,10 @@ const SignUp = () =>{
     let [cPass, setCPass] = useState('');
 
     let navigate = useNavigate();
+
+
+
+    console.log(localStorage.getItem("login"));
 
 
     const handleSubmit = ()=>{
@@ -73,6 +77,14 @@ const SignUp = () =>{
                 });
         })
     }
+
+
+
+    useEffect(() =>{
+        if(localStorage.getItem("login") &&localStorage.getItem("login") === "true"){
+            navigate("user");
+        }
+    }, [localStorage.getItem("login")])
 
     return (
         <div className="outer w-100 justify-content-center d-flex" style={{height:"70vh"}}>
