@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import Task from "./Task";
+import { useNavigate } from "react-router-dom";
 
 const TaskList = ({setAddTask}) =>{
 
-    let [click, setClick] = useState(false);
+    let navigate = useNavigate();
+
 
     const addtaskhandle = ()=>{
         document.getElementById("addtask").style.display = "block";
     }
 
+
+    if(localStorage.getItem("login") === "false"){
+        navigate("/login");
+        return;
+    }
 
     return (
         <div className="container-fluid taskList" style={{height:"fit-content"}}>

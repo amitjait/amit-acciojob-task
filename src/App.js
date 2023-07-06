@@ -18,8 +18,8 @@ const App = () =>{
             <ToastContainer />
             <Navbar />
             <Routes>
-                {/* <Route path="/" element={<SignUp/>}/> */}
-                <Route path="/" element={<TaskList />} />
+                <Route path="/" element={<SignUp/>}/>
+                {/* <Route path="/" element={<TaskList />} /> */}
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/user" element={<TaskList setAddTask={setAddTask}/>} />
             </Routes>

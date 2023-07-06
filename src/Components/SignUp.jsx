@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { auth } from "../firebaseConfig";
 import { toast } from "react-toastify";
 import errorMapping from "../Util/errorMapping";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () =>{
 
     let [email, setEmail] = useState('');
     let [pass, setPass] = useState('');
     let [cPass, setCPass] = useState('');
+
+    let navigate = useNavigate();
 
 
     const handleSubmit = ()=>{
@@ -54,6 +57,8 @@ const SignUp = () =>{
                 theme: "light",
                 });
 
+            navigate("/user");
+            localStorage.setItem("login", "true");
 
         }).catch((e)=>{
             toast.error(errorMapping[e.code] || 'Some Error Occured', {
