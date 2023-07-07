@@ -1,65 +1,63 @@
 import React, { useState } from "react";
-import { auth } from "../firebaseConfig";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import errorMapping from "../Util/errorMapping";
 
-const Login = () =>{
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const navigate = useNavigate();
 
-    let [email, setEmail] = useState('');
-    let [pass, setPass] = useState('');
-
-    let navigate = useNavigate();
-
-
-    const handleSubmit =() =>{
-        if(!email || !pass){
-            toast.warning('Fill All Details', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-            return;
-        }
-
-        auth.signInWithEmailAndPassword(email, pass).then((res)=>{
-            toast.success('Loged In', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-
-                localStorage.setItem("user", email);
-                localStorage.setItem("login", "true");
-
-                navigate("/user");
-        }).catch((e)=>{
-            toast.error(errorMapping[e.code] || 'Some Error Occured', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-        })
+  const handleSubmit = () => {
+    if (!email || !pass) {
+        toast.warning('Fill All Details', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        return;
     }
 
+    // Fetch user data from local storage
+    const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
+    const user = usersData.find((userData) => userData.email === email);
 
-    return (
-        <div className="outer w-100 justify-content-center d-flex" style={{height:"70vh"}}>
+    if (user && user.password === pass) {
+        toast.success('Loged In', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+
+       // Store current user with email in local storage
+      localStorage.setItem("currentUser", JSON.stringify({ email }));
+      localStorage.setItem("login", "true");
+      navigate("/user");
+    } else {
+        toast.error('Some Error Occured', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+    }
+  };
+
+  return (
+    <div className="outer w-100 justify-content-center d-flex" style={{height:"70vh"}}>
             <div className="container w-75 border align-self-center p-3 rounded-5" style={{height:"55vh"}}>
                 <div className="form-top d-flex justify-content-center">
                     <h1>Login</h1>
@@ -78,7 +76,7 @@ const Login = () =>{
                 </div>
             </div>
         </div>
-    )
-}
+  );
+};
 
 export default Login;

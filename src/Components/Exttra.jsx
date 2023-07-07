@@ -1,7 +1,6 @@
 import React from "react";
 
-const Task = ({ taskId, title, dueDate, status, description, deleteTask, setDeleteTask}) => {
-
+const Task = ({ taskId, title, dueDate, status, description }) => {
   const handleOpen = () => {
     document.getElementById("update-task").style.display = "block";
     localStorage.setItem("taskId", taskId); // Store the task ID in localStorage
@@ -22,9 +21,10 @@ const Task = ({ taskId, title, dueDate, status, description, deleteTask, setDele
       const updatedTasks = currentUserData.tasks.filter((task) => task.taskId !== taskId);
       currentUserData.tasks = updatedTasks;
       localStorage.setItem("usersData", JSON.stringify(usersData));
-      setDeleteTask(!deleteTask);
     }
 
+    // Remove the task from the UI by re-rendering the parent component
+    // You need to pass a unique identifier/key for each task component to ensure correct deletion
   };
 
   return (
@@ -33,7 +33,7 @@ const Task = ({ taskId, title, dueDate, status, description, deleteTask, setDele
         {title}
         <span className="d-flex align-items-center gap-3">
           <i className="fa-sharp fa-solid fa-trash" id="delete" onClick={handleDelete}></i>{" "}
-          <i className="fa-solid fa-pen" onClick={() => handleOpen()}></i>
+          <i className="fa-solid fa-pen" onClick={handleOpen}></i>
         </span>
       </div>
       <div className="card-body">

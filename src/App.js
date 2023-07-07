@@ -7,10 +7,12 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import TaskList from "./Components/TaskList";
+import UpdateTask from "./Components/UpdateTask";
 
 const App = () =>{
 
     let [addTask, setAddTask] = useState(false);
+    let [updateTask, setUpdateTask] = useState(false);
     
 
     return (
@@ -20,9 +22,10 @@ const App = () =>{
             <Routes>
                 <Route path="/" element={<SignUp/>}/>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/user" element={<TaskList setAddTask={setAddTask}/>} />
+                <Route path="/user" element={<TaskList addTask={addTask} updateTask={updateTask}/>} />
             </Routes>
-            <CreateTask />
+            <CreateTask addTask={addTask} setAddTask={setAddTask}/>
+            <UpdateTask updateTask={updateTask} setUpdateTask={setUpdateTask}/>
         </div>
     )
 }
