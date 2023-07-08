@@ -1,10 +1,11 @@
 import React from "react";
 
-const Task = ({ taskId, title, dueDate, status, description, deleteTask, setDeleteTask}) => {
+const Task = ({ taskId, title, dueDate, status, description, deleteTask, setDeleteTask, updateTask, setUpdateTask}) => {
 
   const handleOpen = () => {
     document.getElementById("update-task").style.display = "block";
     localStorage.setItem("taskId", taskId); // Store the task ID in localStorage
+    setUpdateTask(!updateTask);
   };
 
   const handleDelete = () => {

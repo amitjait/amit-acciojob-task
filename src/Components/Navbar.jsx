@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebaseConfig";
 import { toast } from "react-toastify";
 
 
@@ -11,7 +10,6 @@ const Navbar = () =>{
 
 
     const logOut =() =>{
-        auth.signOut();
 
         localStorage.setItem("login", "false");
         toast.warning('Loged Out', {

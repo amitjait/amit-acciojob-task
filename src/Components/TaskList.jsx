@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Task from "./Task";
 import { useNavigate } from "react-router-dom";
 
-const TaskList = ({addTask, updateTask}) => {
+const TaskList = ({addTask, updateTask, setUpdateTask}) => {
   const [tasks, setTasks] = useState([]);
   const [deleteTask, setDeleteTask] = useState(false);
   const navigate = useNavigate();
@@ -12,7 +12,9 @@ const TaskList = ({addTask, updateTask}) => {
       const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
+
       if (!currentUser || !currentUser.email) {
+        console.log(currentUser)
         navigate("/login");
         return;
       }
@@ -24,7 +26,7 @@ const TaskList = ({addTask, updateTask}) => {
     };
 
     fetchUserData();
-  }, [addTask, deleteTask, updateTask]);
+  }, [addTask, deleteTask, updateTask, navigate]);
 
   const addTaskHandle = () => {
     document.getElementById("addtask").style.display = "block";
@@ -82,12 +84,12 @@ const TaskList = ({addTask, updateTask}) => {
         <i className="fa-solid fa-plus fs-3" id="add-task-icon" onClick={addTaskHandle}></i>
       </div>
       <div className="container-fluid d-flex flex-wrap">
-        <div className="container mt-2 d-flex align-items-center justify-content-center">
+        <div className="container mt-2 d-flex align-items-center justify-content-center gap-2">
           <div className="input-group mb-3 align-items-center">
-            <label className="input-group-text fw-bold" htmlFor="status" style={{ width: "150px" }}>
+            <label className="input-group-text fw-bold" htmlFor="status" style={{ width: "fit-content" }}>
               Filter By Status
             </label>
-            <select className="form-select" id="status" onChange={handleFilterChange}>
+            <select className="form-select" id="status" onChange={handleFilterChange} >
               <option selected value="">
                 Choose...
               </option>
@@ -97,7 +99,7 @@ const TaskList = ({addTask, updateTask}) => {
             </select>
           </div>
           <div className="input-group mb-3 align-items-center">
-            <label className="input-group-text fw-bold" htmlFor="sort" style={{ width: "150px" }}>
+            <label className="input-group-text fw-bold" htmlFor="sort" style={{ width: "fit-content" }}>
               Sort By Due Date
             </label>
             <select className="form-select" id="sort" onChange={handleSortChange}>
@@ -110,7 +112,7 @@ const TaskList = ({addTask, updateTask}) => {
         </div>
       </div>
 
-      <div className="container mt-4 d-flex flex-wrap justify-content-between">
+      <div className="container mt-4 d-flex flex-wrap justify-content-space gap-3">
         {tasks.length > 0 ? (
           tasks.map((task, index) => (
             <Task
@@ -122,6 +124,8 @@ const TaskList = ({addTask, updateTask}) => {
               description={task.desc}
               deleteTask={deleteTask}
               setDeleteTask={setDeleteTask}
+              updateTask={updateTask}
+              setUpdateTask={setUpdateTask}
             />
           ))
         ) : (

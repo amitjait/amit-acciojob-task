@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const UpdateTask = ({updateTask, setUpdateTask}) => {
-  const [taskId, setTaskId] = useState("");
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [status, setStatus] = useState("");
-  const [desc, setDesc] = useState("");
+const UpdateTask = ({ updateTask, setUpdateTask }) => {
+  const [taskData, setTaskData] = useState({
+    taskId: "",
+    title: "",
+    date: "",
+    status: "",
+    desc: "",
+  });
 
   const handleClose = () => {
     document.getElementById("update-task").style.display = "none";
@@ -14,26 +16,28 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
     // Update the task in localStorage
     const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currTaskId = localStorage.getItem("taskId");
 
     if (!currentUser || !currentUser.email) {
       return;
     }
 
-    const currentUserData = usersData.find((userData) => userData.email === currentUser.email);
+    const currentUserData = usersData.find(
+      (userData) => userData.email === currentUser.email
+    );
 
     if (currentUserData && currentUserData.tasks) {
       const updatedTasks = currentUserData.tasks.map((task) => {
-        if (task.taskId === taskId) {
+        if (task.taskId === currTaskId) {
           return {
-            taskId: taskId,
-            title: (title.length > 0) ? title:task.title,
-            date: (date.length > 0) ? date:task.date,
-            status: (status.length > 0) ? status:task.status,
-            desc: (desc.length > 0) ? desc:task.desc,
+            ...task,
+            title: taskData.title || task.title,
+            date: taskData.date || task.date,
+            status: taskData.status || task.status,
+            desc: taskData.desc || task.desc,
           };
         } else {
           return task;
@@ -46,10 +50,13 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
     }
 
     // Reset the form fields
-    setTitle("");
-    setDate("");
-    setStatus("");
-    setDesc("");
+    setTaskData({
+      taskId: "",
+      title: "",
+      date: "",
+      status: "",
+      desc: "",
+    });
 
     // Close the update form
     handleClose();
@@ -67,24 +74,31 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
       return;
     }
 
-    const currentUserData = usersData.find((userData) => userData.email === currentUser.email);
+    const currentUserData = usersData.find(
+      (userData) => userData.email === currentUser.email
+    );
 
     if (currentUserData && currentUserData.tasks) {
-      const task = currentUserData.tasks.find((task) => task.taskId === taskId);
+      const task = currentUserData.tasks.find(
+        (task) => task.taskId === taskId
+      );
 
       if (task) {
-        setTaskId(taskId);
-        setTitle(task.title);
-        setDate(task.date);
-        setStatus(task.status);
-        setDesc(task.desc);
+        setTaskData(task);
       }
     }
-  }, []);
+  }, [updateTask]);
 
   return (
-    <div className="container-fluid update-task align-items-center" id="update-task" style={{ height: "100vh" }}>
-      <div className="container border p-3 fw-bold rounded-4 opacity-100 inner-task" style={{ height: "50vh" }}>
+    <div
+      className="container-fluid update-task align-items-center"
+      id="update-task"
+      style={{ height: "100vh" }}
+    >
+      <div
+        className="container border p-3 fw-bold rounded-4 opacity-100 inner-task"
+        style={{ height: "50vh" }}
+      >
         <div className="container d-flex">
           <h4 className="w-100 text-center text-light mb-3">Update task</h4>
           <i className="fa-solid fa-xmark fs-3" onClick={handleClose}></i>
@@ -99,8 +113,10 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
                 type="text"
                 className="form-control"
                 id="task-title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={taskData.title}
+                onChange={(e) =>
+                  setTaskData({ ...taskData, title: e.target.value })
+                }
               />
             </div>
             <div className="mb-3 d-flex align-items-center">
@@ -111,8 +127,10 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
                 type="date"
                 className="form-control"
                 id="due-date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={taskData.date}
+                onChange={(e) =>
+                  setTaskData({ ...taskData, date: e.target.value })
+                }
               />
             </div>
             <div className="input-group mb-3 align-items-center">
@@ -122,8 +140,10 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
               <select
                 className="form-select"
                 id="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                value={taskData.status}
+                onChange={(e) =>
+                  setTaskData({ ...taskData, status: e.target.value })
+                }
               >
                 <option value="">Choose...</option>
                 <option value="Incomplete">Incomplete</option>
@@ -139,8 +159,10 @@ const UpdateTask = ({updateTask, setUpdateTask}) => {
                 type="text"
                 className="form-control"
                 id="due-date"
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
+                value={taskData.desc}
+                onChange={(e) =>
+                  setTaskData({ ...taskData, desc: e.target.value })
+                }
               />
             </div>
             <button type="submit" className="btn btn-primary mt-2">

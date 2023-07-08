@@ -26,24 +26,38 @@ const Login = () => {
     const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
     const user = usersData.find((userData) => userData.email === email);
 
-    if (user && user.password === pass) {
-        toast.success('Loged In', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
 
-       // Store current user with email in local storage
-      localStorage.setItem("currentUser", JSON.stringify({ email }));
-      localStorage.setItem("login", "true");
-      navigate("/user");
-    } else {
-        toast.error('Some Error Occured', {
+    if(user){
+        if(user.password === pass){
+            toast.success('Loged In', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+    
+           // Store current user with email in local storage
+          localStorage.setItem("currentUser", JSON.stringify({ email }));
+          localStorage.setItem("login", "true");
+          navigate("/user");
+        }else{
+            toast.error('Please check your password or usename', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+    }else {
+        toast.error('Account not found please login', {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

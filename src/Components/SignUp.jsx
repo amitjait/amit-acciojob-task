@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -59,15 +59,17 @@ const SignUp = () => {
         progress: undefined,
         theme: "light",
         });
-    navigate("/user");
+    
     localStorage.setItem("login", "true");
+    localStorage.setItem("currentUser", JSON.stringify({ email }));
+    navigate("/user");
   };
 
   useEffect(() => {
     if (localStorage.getItem("login") === "true") {
       navigate("user");
     }
-  }, [localStorage.getItem("login")]);
+  }, [navigate]);
 
   return (
     <div className="outer w-100 justify-content-center d-flex" style={{height:"70vh"}}>
